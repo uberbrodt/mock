@@ -43,20 +43,9 @@ func (m *MockArg) Foo() int {
 }
 
 // Foo indicates an expected call of Foo.
-func (mr *MockArgMockRecorder) Foo() *ArgFooCall {
+func (mr *MockArgMockRecorder) Foo() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Foo", reflect.TypeOf((*MockArg)(nil).Foo))
-	return &ArgFooCall{Call: call}
-}
-
-//  ArgFooCall wrap *gomock.Call
-type ArgFooCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *ArgFooCall) Return(arg0 int) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Foo", reflect.TypeOf((*MockArg)(nil).Foo))
 }
 
 // MockIntf is a mock of Intf interface.
@@ -91,18 +80,7 @@ func (m *MockIntf) F() pkg.Arg {
 }
 
 // F indicates an expected call of F.
-func (mr *MockIntfMockRecorder) F() *IntfFCall {
+func (mr *MockIntfMockRecorder) F() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "F", reflect.TypeOf((*MockIntf)(nil).F))
-	return &IntfFCall{Call: call}
-}
-
-//  IntfFCall wrap *gomock.Call
-type IntfFCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *IntfFCall) Return(arg0 pkg.Arg) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "F", reflect.TypeOf((*MockIntf)(nil).F))
 }

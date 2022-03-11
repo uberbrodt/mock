@@ -60,6 +60,7 @@ var (
 	selfPackage     = flag.String("self_package", "", "The full package import path for the generated code. The purpose of this flag is to prevent import cycles in the generated code by trying to include its own package. This can happen if the mock's package is set to one of its inputs (usually the main one) and the output is stdio so mockgen cannot detect the final output package. Setting this flag will then tell mockgen which import to exclude.")
 	writePkgComment = flag.Bool("write_package_comment", true, "Writes package documentation comment (godoc) if true.")
 	copyrightFile   = flag.String("copyright_file", "", "Copyright file used to add copyright header")
+	typed           = flag.Bool("typed", false, "Generate Type-safe 'Return', 'Do', 'DoAndReturn' function")
 
 	debugParser = flag.Bool("debug_parser", false, "Print out parser results only.")
 	showVersion = flag.Bool("version", false, "Print version.")
@@ -436,7 +437,7 @@ func (g *generator) GenerateMockInterface(intf *model.Interface, outputPackagePa
 	g.out()
 	g.p("}")
 
-	g.GenerateMockMethods(mockType, intf, outputPackagePath, shortTp)
+	g.GenerateMockMethods(mockType, intf, outputPackagePath, longTp, shortTp, *typed)
 
 	return nil
 }
@@ -447,13 +448,17 @@ func (b byMethodName) Len() int           { return len(b) }
 func (b byMethodName) Swap(i, j int)      { b[i], b[j] = b[j], b[i] }
 func (b byMethodName) Less(i, j int) bool { return b[i].Name < b[j].Name }
 
-func (g *generator) GenerateMockMethods(mockType string, intf *model.Interface, pkgOverride, shortTp string) {
+func (g *generator) GenerateMockMethods(mockType string, intf *model.Interface, pkgOverride, longTp, shortTp string, typed bool) {
 	sort.Sort(byMethodName(intf.Methods))
 	for _, m := range intf.Methods {
 		g.p("")
-		_ = g.GenerateMockRecorderMethod(intf, mockType, m, shortTp)
+		_ = g.GenerateMockMethod(mockType, m, pkgOverride, shortTp)
 		g.p("")
-		_ = g.GenerateMockReturnCallMethod(intf, m, pkgOverride)
+		_ = g.GenerateMockRecorderMethod(intf, mockType, m, shortTp, typed)
+		if typed {
+			g.p("")
+			_ = g.GenerateMockReturnCallMethod(intf, m, pkgOverride, longTp, shortTp)
+		}
 	}
 }
 
@@ -537,7 +542,7 @@ func (g *generator) GenerateMockMethod(mockType string, m *model.Method, pkgOver
 	return nil
 }
 
-func (g *generator) GenerateMockRecorderMethod(intf *model.Interface, mockType string, m *model.Method, shortTp string) error {
+func (g *generator) GenerateMockRecorderMethod(intf *model.Interface, mockType string, m *model.Method, shortTp string, typed bool) error {
 	argNames := g.getArgNames(m, true)
 
 	var argString string
@@ -561,7 +566,12 @@ func (g *generator) GenerateMockRecorderMethod(intf *model.Interface, mockType s
 	idRecv := ia.allocateIdentifier("mr")
 
 	g.p("// %v indicates an expected call of %v.", m.Name, m.Name)
-	g.p("func (%s *%vMockRecorder%v) %v(%v) *%s%sCall {", idRecv, mockType, shortTp, m.Name, argString, intf.Name, m.Name)
+	if typed {
+		g.p("func (%s *%vMockRecorder%v) %v(%v) *%s%sCall%s {", idRecv, mockType, shortTp, m.Name, argString, intf.Name, m.Name, shortTp)
+	} else {
+		g.p("func (%s *%vMockRecorder%v) %v(%v) *gomock.Call {", idRecv, mockType, shortTp, m.Name, argString)
+	}
+
 	g.in()
 	g.p("%s.mock.ctrl.T.Helper()", idRecv)
 
@@ -584,37 +594,75 @@ func (g *generator) GenerateMockRecorderMethod(intf *model.Interface, mockType s
 			callArgs = ", " + idVarArgs + "..."
 		}
 	}
-	g.p(`call := %s.mock.ctrl.RecordCallWithMethodType(%s.mock, "%s", reflect.TypeOf((*%s%s)(nil).%s)%s)`, idRecv, idRecv, m.Name, mockType, shortTp, m.Name, callArgs)
-	g.p(`return &%s%sCall{Call: call}`, intf.Name, m.Name)
+	if typed {
+		g.p(`call := %s.mock.ctrl.RecordCallWithMethodType(%s.mock, "%s", reflect.TypeOf((*%s%s)(nil).%s)%s)`, idRecv, idRecv, m.Name, mockType, shortTp, m.Name, callArgs)
+		g.p(`return &%s%sCall%s{Call: call}`, intf.Name, m.Name, shortTp)
+	} else {
+		g.p(`return %s.mock.ctrl.RecordCallWithMethodType(%s.mock, "%s", reflect.TypeOf((*%s%s)(nil).%s)%s)`, idRecv, idRecv, m.Name, mockType, shortTp, m.Name, callArgs)
+	}
+
 	g.out()
 	g.p("}")
 	return nil
 }
 
-func (g *generator) GenerateMockReturnCallMethod(intf *model.Interface, m *model.Method, pkgOverride string) error {
+func (g *generator) GenerateMockReturnCallMethod(intf *model.Interface, m *model.Method, pkgOverride, longTp, shortTp string) error {
 	argNames := g.getArgNames(m, true)
 	retNames := g.getArgNames(m, false)
+	argTypes := g.getArgTypes(m, pkgOverride, true)
 	retTypes := g.getArgTypes(m, pkgOverride, false)
-	retString := makeArgString(retNames, retTypes)
+	argString := strings.Join(argTypes, ", ")
+
+	rets := make([]string, len(m.Out))
+	for i, p := range m.Out {
+		rets[i] = p.Type.String(g.packageMap, pkgOverride)
+	}
+
+	retString := strings.Join(rets, ", ")
+	if len(rets) > 1 {
+		retString = "(" + retString + ")"
+	}
+	if retString != "" {
+		retString = " " + retString
+	}
 
 	ia := newIdentifierAllocator(argNames)
 	idRecv := ia.allocateIdentifier("c")
 
+	recvStructName := intf.Name + m.Name
+
 	g.p("//  %s%sCall wrap *gomock.Call", intf.Name, m.Name)
-	g.p("type %s%sCall struct{", intf.Name, m.Name)
+	g.p("type %s%sCall%s struct{", intf.Name, m.Name, longTp)
 	g.in()
 	g.p("*gomock.Call")
 	g.out()
 	g.p("}")
 
 	g.p("// Return rewrite *gomock.Call.Return")
-	g.p("func (%s *%s%sCall) Return(%v) *gomock.Call {", idRecv, intf.Name, m.Name, retString)
+	g.p("func (%s *%sCall%s) Return(%v) *%sCall%s {", idRecv, recvStructName, shortTp, makeArgString(retNames, retTypes), recvStructName, shortTp)
 	g.in()
 	var retArgs string
 	if len(retNames) > 0 {
 		retArgs = strings.Join(retNames, ", ")
 	}
-	g.p(`return %v.Call.Return(%v)`, idRecv, retArgs)
+	g.p(`%s.Call =  %v.Call.Return(%v)`, idRecv, idRecv, retArgs)
+	g.p("return %s", idRecv)
+	g.out()
+	g.p("}")
+
+	g.p("// Do rewrite *gomock.Call.Do")
+	g.p("func (%s *%sCall%s) Do(f func(%v)%v) *%sCall%s {", idRecv, recvStructName, shortTp, argString, retString, recvStructName, shortTp)
+	g.in()
+	g.p(`%s.Call = %v.Call.Do(f)`, idRecv, idRecv)
+	g.p("return %s", idRecv)
+	g.out()
+	g.p("}")
+
+	g.p("// DoAndReturn rewrite *gomock.Call.DoAndReturn")
+	g.p("func (%s *%sCall%s) DoAndReturn(f func(%v)%v) *%sCall%s {", idRecv, recvStructName, shortTp, argString, retString, recvStructName, shortTp)
+	g.in()
+	g.p(`%s.Call = %v.Call.DoAndReturn(f)`, idRecv, idRecv)
+	g.p("return %s", idRecv)
 	g.out()
 	g.p("}")
 	return nil

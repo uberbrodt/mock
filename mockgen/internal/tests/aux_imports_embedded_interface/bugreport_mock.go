@@ -43,20 +43,9 @@ func (m *MockSource) Error() string {
 }
 
 // Error indicates an expected call of Error.
-func (mr *MockSourceMockRecorder) Error() *SourceErrorCall {
+func (mr *MockSourceMockRecorder) Error() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockSource)(nil).Error))
-	return &SourceErrorCall{Call: call}
-}
-
-//  SourceErrorCall wrap *gomock.Call
-type SourceErrorCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *SourceErrorCall) Return(arg0 string) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockSource)(nil).Error))
 }
 
 // Method mocks base method.
@@ -68,18 +57,7 @@ func (m *MockSource) Method() faux.Return {
 }
 
 // Method indicates an expected call of Method.
-func (mr *MockSourceMockRecorder) Method() *SourceMethodCall {
+func (mr *MockSourceMockRecorder) Method() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method", reflect.TypeOf((*MockSource)(nil).Method))
-	return &SourceMethodCall{Call: call}
-}
-
-//  SourceMethodCall wrap *gomock.Call
-type SourceMethodCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *SourceMethodCall) Return(arg0 faux.Return) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method", reflect.TypeOf((*MockSource)(nil).Method))
 }

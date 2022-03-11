@@ -42,20 +42,9 @@ func (m *MockFoo) Bar() string {
 }
 
 // Bar indicates an expected call of Bar.
-func (mr *MockFooMockRecorder) Bar() *FooBarCall {
+func (mr *MockFooMockRecorder) Bar() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bar", reflect.TypeOf((*MockFoo)(nil).Bar))
-	return &FooBarCall{Call: call}
-}
-
-//  FooBarCall wrap *gomock.Call
-type FooBarCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *FooBarCall) Return(arg0 string) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bar", reflect.TypeOf((*MockFoo)(nil).Bar))
 }
 
 // Baz mocks base method.
@@ -67,18 +56,7 @@ func (m *MockFoo) Baz() string {
 }
 
 // Baz indicates an expected call of Baz.
-func (mr *MockFooMockRecorder) Baz() *FooBazCall {
+func (mr *MockFooMockRecorder) Baz() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Baz", reflect.TypeOf((*MockFoo)(nil).Baz))
-	return &FooBazCall{Call: call}
-}
-
-//  FooBazCall wrap *gomock.Call
-type FooBazCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *FooBazCall) Return(arg0 string) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Baz", reflect.TypeOf((*MockFoo)(nil).Baz))
 }

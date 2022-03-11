@@ -40,18 +40,7 @@ func (m *MockS) F(arg0 X) {
 }
 
 // F indicates an expected call of F.
-func (mr *MockSMockRecorder) F(arg0 interface{}) *SFCall {
+func (mr *MockSMockRecorder) F(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "F", reflect.TypeOf((*MockS)(nil).F), arg0)
-	return &SFCall{Call: call}
-}
-
-//  SFCall wrap *gomock.Call
-type SFCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *SFCall) Return() *gomock.Call {
-	return c.Call.Return()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "F", reflect.TypeOf((*MockS)(nil).F), arg0)
 }

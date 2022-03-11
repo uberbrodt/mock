@@ -43,18 +43,7 @@ func (m *MockInputMaker) MakeInput() client.GreetInput {
 }
 
 // MakeInput indicates an expected call of MakeInput.
-func (mr *MockInputMakerMockRecorder) MakeInput() *InputMakerMakeInputCall {
+func (mr *MockInputMakerMockRecorder) MakeInput() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MakeInput", reflect.TypeOf((*MockInputMaker)(nil).MakeInput))
-	return &InputMakerMakeInputCall{Call: call}
-}
-
-//  InputMakerMakeInputCall wrap *gomock.Call
-type InputMakerMakeInputCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *InputMakerMakeInputCall) Return(arg0 client.GreetInput) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MakeInput", reflect.TypeOf((*MockInputMaker)(nil).MakeInput))
 }

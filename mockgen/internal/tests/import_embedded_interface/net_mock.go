@@ -43,20 +43,9 @@ func (m *MockNet) Header() http.Header {
 }
 
 // Header indicates an expected call of Header.
-func (mr *MockNetMockRecorder) Header() *NetHeaderCall {
+func (mr *MockNetMockRecorder) Header() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Header", reflect.TypeOf((*MockNet)(nil).Header))
-	return &NetHeaderCall{Call: call}
-}
-
-//  NetHeaderCall wrap *gomock.Call
-type NetHeaderCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *NetHeaderCall) Return(arg0 http.Header) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Header", reflect.TypeOf((*MockNet)(nil).Header))
 }
 
 // Write mocks base method.
@@ -69,20 +58,9 @@ func (m *MockNet) Write(arg0 []byte) (int, error) {
 }
 
 // Write indicates an expected call of Write.
-func (mr *MockNetMockRecorder) Write(arg0 interface{}) *NetWriteCall {
+func (mr *MockNetMockRecorder) Write(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Write", reflect.TypeOf((*MockNet)(nil).Write), arg0)
-	return &NetWriteCall{Call: call}
-}
-
-//  NetWriteCall wrap *gomock.Call
-type NetWriteCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *NetWriteCall) Return(arg0 int, arg1 error) *gomock.Call {
-	return c.Call.Return(arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Write", reflect.TypeOf((*MockNet)(nil).Write), arg0)
 }
 
 // WriteHeader mocks base method.
@@ -92,18 +70,7 @@ func (m *MockNet) WriteHeader(statusCode int) {
 }
 
 // WriteHeader indicates an expected call of WriteHeader.
-func (mr *MockNetMockRecorder) WriteHeader(statusCode interface{}) *NetWriteHeaderCall {
+func (mr *MockNetMockRecorder) WriteHeader(statusCode interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteHeader", reflect.TypeOf((*MockNet)(nil).WriteHeader), statusCode)
-	return &NetWriteHeaderCall{Call: call}
-}
-
-//  NetWriteHeaderCall wrap *gomock.Call
-type NetWriteHeaderCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *NetWriteHeaderCall) Return() *gomock.Call {
-	return c.Call.Return()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteHeader", reflect.TypeOf((*MockNet)(nil).WriteHeader), statusCode)
 }

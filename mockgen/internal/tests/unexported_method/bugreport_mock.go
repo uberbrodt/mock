@@ -42,18 +42,7 @@ func (m *MockExample) someMethod(arg0 string) string {
 }
 
 // someMethod indicates an expected call of someMethod.
-func (mr *MockExampleMockRecorder) someMethod(arg0 interface{}) *ExamplesomeMethodCall {
+func (mr *MockExampleMockRecorder) someMethod(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "someMethod", reflect.TypeOf((*MockExample)(nil).someMethod), arg0)
-	return &ExamplesomeMethodCall{Call: call}
-}
-
-//  ExamplesomeMethodCall wrap *gomock.Call
-type ExamplesomeMethodCall struct {
-	*gomock.Call
-}
-
-// Return rewrite *gomock.Call.Return
-func (c *ExamplesomeMethodCall) Return(arg0 string) *gomock.Call {
-	return c.Call.Return(arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "someMethod", reflect.TypeOf((*MockExample)(nil).someMethod), arg0)
 }
