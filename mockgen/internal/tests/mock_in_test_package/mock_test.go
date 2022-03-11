@@ -41,9 +41,20 @@ func (m *MockFinder) Add(u mock_in_test_package.User) {
 }
 
 // Add indicates an expected call of Add.
-func (mr *MockFinderMockRecorder) Add(u interface{}) *gomock.Call {
+func (mr *MockFinderMockRecorder) Add(u interface{}) *FinderAddCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockFinder)(nil).Add), u)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockFinder)(nil).Add), u)
+	return &FinderAddCall{Call: call}
+}
+
+//  FinderAddCall wrap *gomock.Call
+type FinderAddCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *FinderAddCall) Return() *gomock.Call {
+	return c.Call.Return()
 }
 
 // FindUser mocks base method.
@@ -55,7 +66,18 @@ func (m *MockFinder) FindUser(name string) mock_in_test_package.User {
 }
 
 // FindUser indicates an expected call of FindUser.
-func (mr *MockFinderMockRecorder) FindUser(name interface{}) *gomock.Call {
+func (mr *MockFinderMockRecorder) FindUser(name interface{}) *FinderFindUserCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUser", reflect.TypeOf((*MockFinder)(nil).FindUser), name)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUser", reflect.TypeOf((*MockFinder)(nil).FindUser), name)
+	return &FinderFindUserCall{Call: call}
+}
+
+//  FinderFindUserCall wrap *gomock.Call
+type FinderFindUserCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *FinderFindUserCall) Return(arg0 mock_in_test_package.User) *gomock.Call {
+	return c.Call.Return(arg0)
 }

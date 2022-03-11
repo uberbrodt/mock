@@ -42,7 +42,18 @@ func (m *MockMethods) getInfo() Info {
 }
 
 // getInfo indicates an expected call of getInfo.
-func (mr *MockMethodsMockRecorder) getInfo() *gomock.Call {
+func (mr *MockMethodsMockRecorder) getInfo() *MethodsgetInfoCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "getInfo", reflect.TypeOf((*MockMethods)(nil).getInfo))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "getInfo", reflect.TypeOf((*MockMethods)(nil).getInfo))
+	return &MethodsgetInfoCall{Call: call}
+}
+
+//  MethodsgetInfoCall wrap *gomock.Call
+type MethodsgetInfoCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MethodsgetInfoCall) Return(arg0 Info) *gomock.Call {
+	return c.Call.Return(arg0)
 }

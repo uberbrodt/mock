@@ -41,7 +41,18 @@ func (m *MockBar) Baz(arg0 source.Foo) {
 }
 
 // Baz indicates an expected call of Baz.
-func (mr *MockBarMockRecorder) Baz(arg0 interface{}) *gomock.Call {
+func (mr *MockBarMockRecorder) Baz(arg0 interface{}) *BarBazCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Baz", reflect.TypeOf((*MockBar)(nil).Baz), arg0)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Baz", reflect.TypeOf((*MockBar)(nil).Baz), arg0)
+	return &BarBazCall{Call: call}
+}
+
+//  BarBazCall wrap *gomock.Call
+type BarBazCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *BarBazCall) Return() *gomock.Call {
+	return c.Call.Return()
 }

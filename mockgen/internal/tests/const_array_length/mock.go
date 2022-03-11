@@ -42,9 +42,20 @@ func (m *MockI) Bar() [2]int {
 }
 
 // Bar indicates an expected call of Bar.
-func (mr *MockIMockRecorder) Bar() *gomock.Call {
+func (mr *MockIMockRecorder) Bar() *IBarCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bar", reflect.TypeOf((*MockI)(nil).Bar))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bar", reflect.TypeOf((*MockI)(nil).Bar))
+	return &IBarCall{Call: call}
+}
+
+//  IBarCall wrap *gomock.Call
+type IBarCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *IBarCall) Return(arg0 [2]int) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Baz mocks base method.
@@ -56,9 +67,20 @@ func (m *MockI) Baz() [127]int {
 }
 
 // Baz indicates an expected call of Baz.
-func (mr *MockIMockRecorder) Baz() *gomock.Call {
+func (mr *MockIMockRecorder) Baz() *IBazCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Baz", reflect.TypeOf((*MockI)(nil).Baz))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Baz", reflect.TypeOf((*MockI)(nil).Baz))
+	return &IBazCall{Call: call}
+}
+
+//  IBazCall wrap *gomock.Call
+type IBazCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *IBazCall) Return(arg0 [127]int) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Corge mocks base method.
@@ -70,9 +92,20 @@ func (m *MockI) Corge() [7]int {
 }
 
 // Corge indicates an expected call of Corge.
-func (mr *MockIMockRecorder) Corge() *gomock.Call {
+func (mr *MockIMockRecorder) Corge() *ICorgeCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Corge", reflect.TypeOf((*MockI)(nil).Corge))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Corge", reflect.TypeOf((*MockI)(nil).Corge))
+	return &ICorgeCall{Call: call}
+}
+
+//  ICorgeCall wrap *gomock.Call
+type ICorgeCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *ICorgeCall) Return(arg0 [7]int) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Foo mocks base method.
@@ -84,9 +117,20 @@ func (m *MockI) Foo() [2]int {
 }
 
 // Foo indicates an expected call of Foo.
-func (mr *MockIMockRecorder) Foo() *gomock.Call {
+func (mr *MockIMockRecorder) Foo() *IFooCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Foo", reflect.TypeOf((*MockI)(nil).Foo))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Foo", reflect.TypeOf((*MockI)(nil).Foo))
+	return &IFooCall{Call: call}
+}
+
+//  IFooCall wrap *gomock.Call
+type IFooCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *IFooCall) Return(arg0 [2]int) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Quux mocks base method.
@@ -98,9 +142,20 @@ func (m *MockI) Quux() [3]int {
 }
 
 // Quux indicates an expected call of Quux.
-func (mr *MockIMockRecorder) Quux() *gomock.Call {
+func (mr *MockIMockRecorder) Quux() *IQuuxCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Quux", reflect.TypeOf((*MockI)(nil).Quux))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Quux", reflect.TypeOf((*MockI)(nil).Quux))
+	return &IQuuxCall{Call: call}
+}
+
+//  IQuuxCall wrap *gomock.Call
+type IQuuxCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *IQuuxCall) Return(arg0 [3]int) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Qux mocks base method.
@@ -112,7 +167,18 @@ func (m *MockI) Qux() [3]int {
 }
 
 // Qux indicates an expected call of Qux.
-func (mr *MockIMockRecorder) Qux() *gomock.Call {
+func (mr *MockIMockRecorder) Qux() *IQuxCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Qux", reflect.TypeOf((*MockI)(nil).Qux))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Qux", reflect.TypeOf((*MockI)(nil).Qux))
+	return &IQuxCall{Call: call}
+}
+
+//  IQuxCall wrap *gomock.Call
+type IQuxCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *IQuxCall) Return(arg0 [3]int) *gomock.Call {
+	return c.Call.Return(arg0)
 }

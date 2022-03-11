@@ -42,9 +42,20 @@ func (m *MockMatcher) Matches(arg0 interface{}) bool {
 }
 
 // Matches indicates an expected call of Matches.
-func (mr *MockMatcherMockRecorder) Matches(arg0 interface{}) *gomock.Call {
+func (mr *MockMatcherMockRecorder) Matches(arg0 interface{}) *MatcherMatchesCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Matches", reflect.TypeOf((*MockMatcher)(nil).Matches), arg0)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Matches", reflect.TypeOf((*MockMatcher)(nil).Matches), arg0)
+	return &MatcherMatchesCall{Call: call}
+}
+
+//  MatcherMatchesCall wrap *gomock.Call
+type MatcherMatchesCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MatcherMatchesCall) Return(arg0 bool) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // String mocks base method.
@@ -56,7 +67,18 @@ func (m *MockMatcher) String() string {
 }
 
 // String indicates an expected call of String.
-func (mr *MockMatcherMockRecorder) String() *gomock.Call {
+func (mr *MockMatcherMockRecorder) String() *MatcherStringCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "String", reflect.TypeOf((*MockMatcher)(nil).String))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "String", reflect.TypeOf((*MockMatcher)(nil).String))
+	return &MatcherStringCall{Call: call}
+}
+
+//  MatcherStringCall wrap *gomock.Call
+type MatcherStringCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MatcherStringCall) Return(arg0 string) *gomock.Call {
+	return c.Call.Return(arg0)
 }

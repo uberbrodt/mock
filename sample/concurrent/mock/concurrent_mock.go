@@ -42,7 +42,18 @@ func (m *MockMath) Sum(arg0, arg1 int) int {
 }
 
 // Sum indicates an expected call of Sum.
-func (mr *MockMathMockRecorder) Sum(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockMathMockRecorder) Sum(arg0, arg1 interface{}) *MathSumCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Sum", reflect.TypeOf((*MockMath)(nil).Sum), arg0, arg1)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Sum", reflect.TypeOf((*MockMath)(nil).Sum), arg0, arg1)
+	return &MathSumCall{Call: call}
+}
+
+//  MathSumCall wrap *gomock.Call
+type MathSumCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *MathSumCall) Return(arg0 int) *gomock.Call {
+	return c.Call.Return(arg0)
 }

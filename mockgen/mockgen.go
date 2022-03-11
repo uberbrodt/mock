@@ -451,9 +451,9 @@ func (g *generator) GenerateMockMethods(mockType string, intf *model.Interface, 
 	sort.Sort(byMethodName(intf.Methods))
 	for _, m := range intf.Methods {
 		g.p("")
-		_ = g.GenerateMockMethod(mockType, m, pkgOverride, shortTp)
+		_ = g.GenerateMockRecorderMethod(intf, mockType, m, shortTp)
 		g.p("")
-		_ = g.GenerateMockRecorderMethod(mockType, m, shortTp)
+		_ = g.GenerateMockReturnCallMethod(intf, m, pkgOverride)
 	}
 }
 
@@ -473,8 +473,8 @@ func makeArgString(argNames, argTypes []string) string {
 // GenerateMockMethod generates a mock method implementation.
 // If non-empty, pkgOverride is the package in which unqualified types reside.
 func (g *generator) GenerateMockMethod(mockType string, m *model.Method, pkgOverride, shortTp string) error {
-	argNames := g.getArgNames(m)
-	argTypes := g.getArgTypes(m, pkgOverride)
+	argNames := g.getArgNames(m, true)
+	argTypes := g.getArgTypes(m, pkgOverride, true)
 	argString := makeArgString(argNames, argTypes)
 
 	rets := make([]string, len(m.Out))
@@ -537,8 +537,8 @@ func (g *generator) GenerateMockMethod(mockType string, m *model.Method, pkgOver
 	return nil
 }
 
-func (g *generator) GenerateMockRecorderMethod(mockType string, m *model.Method, shortTp string) error {
-	argNames := g.getArgNames(m)
+func (g *generator) GenerateMockRecorderMethod(intf *model.Interface, mockType string, m *model.Method, shortTp string) error {
+	argNames := g.getArgNames(m, true)
 
 	var argString string
 	if m.Variadic == nil {
@@ -561,7 +561,7 @@ func (g *generator) GenerateMockRecorderMethod(mockType string, m *model.Method,
 	idRecv := ia.allocateIdentifier("mr")
 
 	g.p("// %v indicates an expected call of %v.", m.Name, m.Name)
-	g.p("func (%s *%vMockRecorder%v) %v(%v) *gomock.Call {", idRecv, mockType, shortTp, m.Name, argString)
+	g.p("func (%s *%vMockRecorder%v) %v(%v) *%s%sCall {", idRecv, mockType, shortTp, m.Name, argString, intf.Name, m.Name)
 	g.in()
 	g.p("%s.mock.ctrl.T.Helper()", idRecv)
 
@@ -584,16 +584,51 @@ func (g *generator) GenerateMockRecorderMethod(mockType string, m *model.Method,
 			callArgs = ", " + idVarArgs + "..."
 		}
 	}
-	g.p(`return %s.mock.ctrl.RecordCallWithMethodType(%s.mock, "%s", reflect.TypeOf((*%s%s)(nil).%s)%s)`, idRecv, idRecv, m.Name, mockType, shortTp, m.Name, callArgs)
-
+	g.p(`call := %s.mock.ctrl.RecordCallWithMethodType(%s.mock, "%s", reflect.TypeOf((*%s%s)(nil).%s)%s)`, idRecv, idRecv, m.Name, mockType, shortTp, m.Name, callArgs)
+	g.p(`return &%s%sCall{Call: call}`, intf.Name, m.Name)
 	g.out()
 	g.p("}")
 	return nil
 }
 
-func (g *generator) getArgNames(m *model.Method) []string {
-	argNames := make([]string, len(m.In))
-	for i, p := range m.In {
+func (g *generator) GenerateMockReturnCallMethod(intf *model.Interface, m *model.Method, pkgOverride string) error {
+	argNames := g.getArgNames(m, true)
+	retNames := g.getArgNames(m, false)
+	retTypes := g.getArgTypes(m, pkgOverride, false)
+	retString := makeArgString(retNames, retTypes)
+
+	ia := newIdentifierAllocator(argNames)
+	idRecv := ia.allocateIdentifier("c")
+
+	g.p("//  %s%sCall wrap *gomock.Call", intf.Name, m.Name)
+	g.p("type %s%sCall struct{", intf.Name, m.Name)
+	g.in()
+	g.p("*gomock.Call")
+	g.out()
+	g.p("}")
+
+	g.p("// Return rewrite *gomock.Call.Return")
+	g.p("func (%s *%s%sCall) Return(%v) *gomock.Call {", idRecv, intf.Name, m.Name, retString)
+	g.in()
+	var retArgs string
+	if len(retNames) > 0 {
+		retArgs = strings.Join(retNames, ", ")
+	}
+	g.p(`return %v.Call.Return(%v)`, idRecv, retArgs)
+	g.out()
+	g.p("}")
+	return nil
+}
+
+func (g *generator) getArgNames(m *model.Method, in bool) []string {
+	var params []*model.Parameter
+	if in {
+		params = m.In
+	} else {
+		params = m.Out
+	}
+	argNames := make([]string, len(params))
+	for i, p := range params {
 		name := p.Name
 		if name == "" || name == "_" {
 			name = fmt.Sprintf("arg%d", i)
@@ -603,16 +638,22 @@ func (g *generator) getArgNames(m *model.Method) []string {
 	if m.Variadic != nil {
 		name := m.Variadic.Name
 		if name == "" {
-			name = fmt.Sprintf("arg%d", len(m.In))
+			name = fmt.Sprintf("arg%d", len(params))
 		}
 		argNames = append(argNames, name)
 	}
 	return argNames
 }
 
-func (g *generator) getArgTypes(m *model.Method, pkgOverride string) []string {
-	argTypes := make([]string, len(m.In))
-	for i, p := range m.In {
+func (g *generator) getArgTypes(m *model.Method, pkgOverride string, in bool) []string {
+	var params []*model.Parameter
+	if in {
+		params = m.In
+	} else {
+		params = m.Out
+	}
+	argTypes := make([]string, len(params))
+	for i, p := range params {
 		argTypes[i] = p.Type.String(g.packageMap, pkgOverride)
 	}
 	if m.Variadic != nil {

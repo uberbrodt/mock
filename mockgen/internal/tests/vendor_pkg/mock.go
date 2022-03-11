@@ -42,7 +42,18 @@ func (m *MockElem) TemplateName() string {
 }
 
 // TemplateName indicates an expected call of TemplateName.
-func (mr *MockElemMockRecorder) TemplateName() *gomock.Call {
+func (mr *MockElemMockRecorder) TemplateName() *ElemTemplateNameCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TemplateName", reflect.TypeOf((*MockElem)(nil).TemplateName))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TemplateName", reflect.TypeOf((*MockElem)(nil).TemplateName))
+	return &ElemTemplateNameCall{Call: call}
+}
+
+//  ElemTemplateNameCall wrap *gomock.Call
+type ElemTemplateNameCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *ElemTemplateNameCall) Return(arg0 string) *gomock.Call {
+	return c.Call.Return(arg0)
 }

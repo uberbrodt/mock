@@ -45,9 +45,20 @@ func (m *MockWithDotImports) Method1() Request {
 }
 
 // Method1 indicates an expected call of Method1.
-func (mr *MockWithDotImportsMockRecorder) Method1() *gomock.Call {
+func (mr *MockWithDotImportsMockRecorder) Method1() *WithDotImportsMethod1Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method1", reflect.TypeOf((*MockWithDotImports)(nil).Method1))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method1", reflect.TypeOf((*MockWithDotImports)(nil).Method1))
+	return &WithDotImportsMethod1Call{Call: call}
+}
+
+//  WithDotImportsMethod1Call wrap *gomock.Call
+type WithDotImportsMethod1Call struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *WithDotImportsMethod1Call) Return(arg0 Request) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Method2 mocks base method.
@@ -59,9 +70,20 @@ func (m *MockWithDotImports) Method2() *bytes.Buffer {
 }
 
 // Method2 indicates an expected call of Method2.
-func (mr *MockWithDotImportsMockRecorder) Method2() *gomock.Call {
+func (mr *MockWithDotImportsMockRecorder) Method2() *WithDotImportsMethod2Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method2", reflect.TypeOf((*MockWithDotImports)(nil).Method2))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method2", reflect.TypeOf((*MockWithDotImports)(nil).Method2))
+	return &WithDotImportsMethod2Call{Call: call}
+}
+
+//  WithDotImportsMethod2Call wrap *gomock.Call
+type WithDotImportsMethod2Call struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *WithDotImportsMethod2Call) Return(arg0 *bytes.Buffer) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Method3 mocks base method.
@@ -73,7 +95,18 @@ func (m *MockWithDotImports) Method3() Context {
 }
 
 // Method3 indicates an expected call of Method3.
-func (mr *MockWithDotImportsMockRecorder) Method3() *gomock.Call {
+func (mr *MockWithDotImportsMockRecorder) Method3() *WithDotImportsMethod3Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method3", reflect.TypeOf((*MockWithDotImports)(nil).Method3))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Method3", reflect.TypeOf((*MockWithDotImports)(nil).Method3))
+	return &WithDotImportsMethod3Call{Call: call}
+}
+
+//  WithDotImportsMethod3Call wrap *gomock.Call
+type WithDotImportsMethod3Call struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *WithDotImportsMethod3Call) Return(arg0 Context) *gomock.Call {
+	return c.Call.Return(arg0)
 }

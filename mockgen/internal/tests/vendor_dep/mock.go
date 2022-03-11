@@ -43,7 +43,18 @@ func (m *MockVendorsDep) Foo() present.Elem {
 }
 
 // Foo indicates an expected call of Foo.
-func (mr *MockVendorsDepMockRecorder) Foo() *gomock.Call {
+func (mr *MockVendorsDepMockRecorder) Foo() *VendorsDepFooCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Foo", reflect.TypeOf((*MockVendorsDep)(nil).Foo))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Foo", reflect.TypeOf((*MockVendorsDep)(nil).Foo))
+	return &VendorsDepFooCall{Call: call}
+}
+
+//  VendorsDepFooCall wrap *gomock.Call
+type VendorsDepFooCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *VendorsDepFooCall) Return(arg0 present.Elem) *gomock.Call {
+	return c.Call.Return(arg0)
 }

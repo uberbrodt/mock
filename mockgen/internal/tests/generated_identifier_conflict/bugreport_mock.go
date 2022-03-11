@@ -40,9 +40,20 @@ func (m_2 *MockExample) Method(_m, _mr, m, mr int) {
 }
 
 // Method indicates an expected call of Method.
-func (mr_2 *MockExampleMockRecorder) Method(_m, _mr, m, mr interface{}) *gomock.Call {
+func (mr_2 *MockExampleMockRecorder) Method(_m, _mr, m, mr interface{}) *ExampleMethodCall {
 	mr_2.mock.ctrl.T.Helper()
-	return mr_2.mock.ctrl.RecordCallWithMethodType(mr_2.mock, "Method", reflect.TypeOf((*MockExample)(nil).Method), _m, _mr, m, mr)
+	call := mr_2.mock.ctrl.RecordCallWithMethodType(mr_2.mock, "Method", reflect.TypeOf((*MockExample)(nil).Method), _m, _mr, m, mr)
+	return &ExampleMethodCall{Call: call}
+}
+
+//  ExampleMethodCall wrap *gomock.Call
+type ExampleMethodCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *ExampleMethodCall) Return() *gomock.Call {
+	return c.Call.Return()
 }
 
 // VarargMethod mocks base method.
@@ -56,8 +67,19 @@ func (m *MockExample) VarargMethod(_s, _x, a, ret int, varargs ...int) {
 }
 
 // VarargMethod indicates an expected call of VarargMethod.
-func (mr *MockExampleMockRecorder) VarargMethod(_s, _x, a, ret interface{}, varargs ...interface{}) *gomock.Call {
+func (mr *MockExampleMockRecorder) VarargMethod(_s, _x, a, ret interface{}, varargs ...interface{}) *ExampleVarargMethodCall {
 	mr.mock.ctrl.T.Helper()
 	varargs_2 := append([]interface{}{_s, _x, a, ret}, varargs...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VarargMethod", reflect.TypeOf((*MockExample)(nil).VarargMethod), varargs_2...)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VarargMethod", reflect.TypeOf((*MockExample)(nil).VarargMethod), varargs_2...)
+	return &ExampleVarargMethodCall{Call: call}
+}
+
+//  ExampleVarargMethodCall wrap *gomock.Call
+type ExampleVarargMethodCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *ExampleVarargMethodCall) Return(varargs ...int) *gomock.Call {
+	return c.Call.Return(varargs)
 }

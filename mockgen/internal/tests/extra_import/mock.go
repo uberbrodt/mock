@@ -40,7 +40,18 @@ func (m *MockFoo) Bar(arg0 []string, arg1 chan<- Message) {
 }
 
 // Bar indicates an expected call of Bar.
-func (mr *MockFooMockRecorder) Bar(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockFooMockRecorder) Bar(arg0, arg1 interface{}) *FooBarCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bar", reflect.TypeOf((*MockFoo)(nil).Bar), arg0, arg1)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bar", reflect.TypeOf((*MockFoo)(nil).Bar), arg0, arg1)
+	return &FooBarCall{Call: call}
+}
+
+//  FooBarCall wrap *gomock.Call
+type FooBarCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *FooBarCall) Return() *gomock.Call {
+	return c.Call.Return()
 }

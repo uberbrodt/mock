@@ -42,9 +42,20 @@ func (m *MockReadWriteCloser) Close() error {
 }
 
 // Close indicates an expected call of Close.
-func (mr *MockReadWriteCloserMockRecorder) Close() *gomock.Call {
+func (mr *MockReadWriteCloserMockRecorder) Close() *ReadWriteCloserCloseCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockReadWriteCloser)(nil).Close))
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockReadWriteCloser)(nil).Close))
+	return &ReadWriteCloserCloseCall{Call: call}
+}
+
+//  ReadWriteCloserCloseCall wrap *gomock.Call
+type ReadWriteCloserCloseCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *ReadWriteCloserCloseCall) Return(arg0 error) *gomock.Call {
+	return c.Call.Return(arg0)
 }
 
 // Read mocks base method.
@@ -57,9 +68,20 @@ func (m *MockReadWriteCloser) Read(arg0 []byte) (int, error) {
 }
 
 // Read indicates an expected call of Read.
-func (mr *MockReadWriteCloserMockRecorder) Read(arg0 interface{}) *gomock.Call {
+func (mr *MockReadWriteCloserMockRecorder) Read(arg0 interface{}) *ReadWriteCloserReadCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockReadWriteCloser)(nil).Read), arg0)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockReadWriteCloser)(nil).Read), arg0)
+	return &ReadWriteCloserReadCall{Call: call}
+}
+
+//  ReadWriteCloserReadCall wrap *gomock.Call
+type ReadWriteCloserReadCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *ReadWriteCloserReadCall) Return(arg0 int, arg1 error) *gomock.Call {
+	return c.Call.Return(arg0, arg1)
 }
 
 // Write mocks base method.
@@ -72,7 +94,18 @@ func (m *MockReadWriteCloser) Write(arg0 []byte) (int, error) {
 }
 
 // Write indicates an expected call of Write.
-func (mr *MockReadWriteCloserMockRecorder) Write(arg0 interface{}) *gomock.Call {
+func (mr *MockReadWriteCloserMockRecorder) Write(arg0 interface{}) *ReadWriteCloserWriteCall {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Write", reflect.TypeOf((*MockReadWriteCloser)(nil).Write), arg0)
+	call := mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Write", reflect.TypeOf((*MockReadWriteCloser)(nil).Write), arg0)
+	return &ReadWriteCloserWriteCall{Call: call}
+}
+
+//  ReadWriteCloserWriteCall wrap *gomock.Call
+type ReadWriteCloserWriteCall struct {
+	*gomock.Call
+}
+
+// Return rewrite *gomock.Call.Return
+func (c *ReadWriteCloserWriteCall) Return(arg0 int, arg1 error) *gomock.Call {
+	return c.Call.Return(arg0, arg1)
 }
