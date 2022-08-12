@@ -172,39 +172,170 @@ func (mr *MockExternalConstraintMockRecorder[I, F]) Two(arg0 interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Two", reflect.TypeOf((*MockExternalConstraint[I, F])(nil).Two), arg0)
 }
 
-// MockTwentyTwo is a mock of TwentyTwo interface.
-type MockTwentyTwo[T any] struct {
+// MockEmbeddingIface is a mock of EmbeddingIface interface.
+type MockEmbeddingIface[T constraints.Integer, R constraints.Float] struct {
 	ctrl     *gomock.Controller
-	recorder *MockTwentyTwoMockRecorder[T]
+	recorder *MockEmbeddingIfaceMockRecorder[T, R]
 }
 
-// MockTwentyTwoMockRecorder is the mock recorder for MockTwentyTwo.
-type MockTwentyTwoMockRecorder[T any] struct {
-	mock *MockTwentyTwo[T]
+// MockEmbeddingIfaceMockRecorder is the mock recorder for MockEmbeddingIface.
+type MockEmbeddingIfaceMockRecorder[T constraints.Integer, R constraints.Float] struct {
+	mock *MockEmbeddingIface[T, R]
 }
 
-// NewMockTwentyTwo creates a new mock instance.
-func NewMockTwentyTwo[T any](ctrl *gomock.Controller) *MockTwentyTwo[T] {
-	mock := &MockTwentyTwo[T]{ctrl: ctrl}
-	mock.recorder = &MockTwentyTwoMockRecorder[T]{mock}
+// NewMockEmbeddingIface creates a new mock instance.
+func NewMockEmbeddingIface[T constraints.Integer, R constraints.Float](ctrl *gomock.Controller) *MockEmbeddingIface[T, R] {
+	mock := &MockEmbeddingIface[T, R]{ctrl: ctrl}
+	mock.recorder = &MockEmbeddingIfaceMockRecorder[T, R]{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockTwentyTwo[T]) EXPECT() *MockTwentyTwoMockRecorder[T] {
+func (m *MockEmbeddingIface[T, R]) EXPECT() *MockEmbeddingIfaceMockRecorder[T, R] {
 	return m.recorder
 }
 
+// Foo mocks base method.
+func (m *MockEmbeddingIface[T, R]) Foo() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Foo")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Foo indicates an expected call of Foo.
+func (mr *MockEmbeddingIfaceMockRecorder[T, R]) Foo() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Foo", reflect.TypeOf((*MockEmbeddingIface[T, R])(nil).Foo))
+}
+
+// Twenty mocks base method.
+func (m *MockEmbeddingIface[T, R]) Twenty() (R, T) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Twenty")
+	ret0, _ := ret[0].(R)
+	ret1, _ := ret[1].(T)
+	return ret0, ret1
+}
+
+// Twenty indicates an expected call of Twenty.
+func (mr *MockEmbeddingIfaceMockRecorder[T, R]) Twenty() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Twenty", reflect.TypeOf((*MockEmbeddingIface[T, R])(nil).Twenty))
+}
+
+// TwentyFour mocks base method.
+func (m *MockEmbeddingIface[T, R]) TwentyFour() other.StructType {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TwentyFour")
+	ret0, _ := ret[0].(other.StructType)
+	return ret0
+}
+
+// TwentyFour indicates an expected call of TwentyFour.
+func (mr *MockEmbeddingIfaceMockRecorder[T, R]) TwentyFour() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TwentyFour", reflect.TypeOf((*MockEmbeddingIface[T, R])(nil).TwentyFour))
+}
+
+// TwentyThree mocks base method.
+func (m *MockEmbeddingIface[T, R]) TwentyThree() other.StructType {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TwentyThree")
+	ret0, _ := ret[0].(other.StructType)
+	return ret0
+}
+
+// TwentyThree indicates an expected call of TwentyThree.
+func (mr *MockEmbeddingIfaceMockRecorder[T, R]) TwentyThree() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TwentyThree", reflect.TypeOf((*MockEmbeddingIface[T, R])(nil).TwentyThree))
+}
+
 // TwentyTwo mocks base method.
-func (m *MockTwentyTwo[T]) TwentyTwo() T {
+func (m *MockEmbeddingIface[T, R]) TwentyTwo() generics.StructType {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "TwentyTwo")
-	ret0, _ := ret[0].(T)
+	ret0, _ := ret[0].(generics.StructType)
 	return ret0
 }
 
 // TwentyTwo indicates an expected call of TwentyTwo.
-func (mr *MockTwentyTwoMockRecorder[T]) TwentyTwo() *gomock.Call {
+func (mr *MockEmbeddingIfaceMockRecorder[T, R]) TwentyTwo() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TwentyTwo", reflect.TypeOf((*MockTwentyTwo[T])(nil).TwentyTwo))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TwentyTwo", reflect.TypeOf((*MockEmbeddingIface[T, R])(nil).TwentyTwo))
+}
+
+// MockTwentyOne is a mock of TwentyOne interface.
+type MockTwentyOne[T any] struct {
+	ctrl     *gomock.Controller
+	recorder *MockTwentyOneMockRecorder[T]
+}
+
+// MockTwentyOneMockRecorder is the mock recorder for MockTwentyOne.
+type MockTwentyOneMockRecorder[T any] struct {
+	mock *MockTwentyOne[T]
+}
+
+// NewMockTwentyOne creates a new mock instance.
+func NewMockTwentyOne[T any](ctrl *gomock.Controller) *MockTwentyOne[T] {
+	mock := &MockTwentyOne[T]{ctrl: ctrl}
+	mock.recorder = &MockTwentyOneMockRecorder[T]{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockTwentyOne[T]) EXPECT() *MockTwentyOneMockRecorder[T] {
+	return m.recorder
+}
+
+// TwentyOne mocks base method.
+func (m *MockTwentyOne[T]) TwentyOne() T {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TwentyOne")
+	ret0, _ := ret[0].(T)
+	return ret0
+}
+
+// TwentyOne indicates an expected call of TwentyOne.
+func (mr *MockTwentyOneMockRecorder[T]) TwentyOne() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TwentyOne", reflect.TypeOf((*MockTwentyOne[T])(nil).TwentyOne))
+}
+
+// MockTwentyFour is a mock of TwentyFour interface.
+type MockTwentyFour[T other.StructType] struct {
+	ctrl     *gomock.Controller
+	recorder *MockTwentyFourMockRecorder[T]
+}
+
+// MockTwentyFourMockRecorder is the mock recorder for MockTwentyFour.
+type MockTwentyFourMockRecorder[T other.StructType] struct {
+	mock *MockTwentyFour[T]
+}
+
+// NewMockTwentyFour creates a new mock instance.
+func NewMockTwentyFour[T other.StructType](ctrl *gomock.Controller) *MockTwentyFour[T] {
+	mock := &MockTwentyFour[T]{ctrl: ctrl}
+	mock.recorder = &MockTwentyFourMockRecorder[T]{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockTwentyFour[T]) EXPECT() *MockTwentyFourMockRecorder[T] {
+	return m.recorder
+}
+
+// TwentyFour mocks base method.
+func (m *MockTwentyFour[T]) TwentyFour() T {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TwentyFour")
+	ret0, _ := ret[0].(T)
+	return ret0
+}
+
+// TwentyFour indicates an expected call of TwentyFour.
+func (mr *MockTwentyFourMockRecorder[T]) TwentyFour() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TwentyFour", reflect.TypeOf((*MockTwentyFour[T])(nil).TwentyFour))
 }

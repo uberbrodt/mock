@@ -20,6 +20,18 @@ type ExternalConstraint[I constraints.Integer, F constraints.Float] interface {
 	Ten(*I)
 }
 
-type TwentyTwo[T any] interface {
-	TwentyTwo() T
+type EmbeddingIface[T constraints.Integer, R constraints.Float] interface {
+	other.Twenty[R, T]
+	TwentyTwo[StructType]
+	other.TwentyThree[StructType]
+	TwentyFour[other.StructType]
+	Foo() error
+}
+
+type TwentyOne[T any] interface {
+	TwentyOne() T
+}
+
+type TwentyFour[T other.StructType] interface {
+	TwentyFour() T
 }
