@@ -14,7 +14,7 @@
 
 package gomock_test
 
-//go:generate mockgen -destination internal/mock_gomock/mock_matcher.go github.com/golang/mock/gomock Matcher
+//go:generate mockgen -destination internal/mock_gomock/mock_matcher.go github.com/uberbrodt/mock/gomock Matcher
 
 import (
 	"context"
@@ -22,8 +22,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/golang/mock/gomock"
-	"github.com/golang/mock/gomock/internal/mock_gomock"
+	"github.com/uberbrodt/mock/gomock"
+	"github.com/uberbrodt/mock/gomock/internal/mock_gomock"
 )
 
 type A []string
@@ -37,16 +37,20 @@ func TestMatchers(t *testing.T) {
 	}{
 		{"test Any", gomock.Any(), []e{3, nil, "foo"}, nil},
 		{"test All", gomock.Eq(4), []e{4}, []e{3, "blah", nil, int64(4)}},
-		{"test Nil", gomock.Nil(),
+		{
+			"test Nil", gomock.Nil(),
 			[]e{nil, (error)(nil), (chan bool)(nil), (*int)(nil)},
-			[]e{"", 0, make(chan bool), errors.New("err"), new(int)}},
+			[]e{"", 0, make(chan bool), errors.New("err"), new(int)},
+		},
 		{"test Not", gomock.Not(gomock.Eq(4)), []e{3, "blah", nil, int64(4)}, []e{4}},
 		{"test All", gomock.All(gomock.Any(), gomock.Eq(4)), []e{4}, []e{3, "blah", nil, int64(4)}},
-		{"test Len", gomock.Len(2),
+		{
+			"test Len", gomock.Len(2),
 			[]e{[]int{1, 2}, "ab", map[string]int{"a": 0, "b": 1}, [2]string{"a", "b"}},
 			[]e{[]int{1}, "a", 42, 42.0, false, [1]string{"a"}},
 		},
-		{"test assignable types", gomock.Eq(A{"a", "b"}),
+		{
+			"test assignable types", gomock.Eq(A{"a", "b"}),
 			[]e{[]string{"a", "b"}, A{"a", "b"}},
 			[]e{[]string{"a"}, A{"b"}},
 		},

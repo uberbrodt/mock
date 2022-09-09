@@ -3,7 +3,7 @@ package generics
 import (
 	"context"
 
-	"github.com/golang/mock/mockgen/internal/tests/generics/other"
+	"github.com/uberbrodt/mock/mockgen/internal/tests/generics/other"
 	"golang.org/x/exp/constraints"
 )
 

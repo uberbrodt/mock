@@ -32,7 +32,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/golang/mock/mockgen/model"
+	"github.com/uberbrodt/mock/mockgen/model"
 )
 
 var (
@@ -143,7 +143,7 @@ func runInDir(program []byte, dir string) (*model.Package, error) {
 		}
 	}()
 	const progSource = "prog.go"
-	var progBinary = "prog.bin"
+	progBinary := "prog.bin"
 	if runtime.GOOS == "windows" {
 		// Windows won't execute a program unless it has a ".exe" suffix.
 		progBinary += ".exe"
@@ -169,8 +169,8 @@ func runInDir(program []byte, dir string) (*model.Package, error) {
 	if err := cmd.Run(); err != nil {
 		sErr := buf.String()
 		if strings.Contains(sErr, `cannot find package "."`) &&
-			strings.Contains(sErr, "github.com/golang/mock/mockgen/model") {
-			fmt.Fprint(os.Stderr, "Please reference the steps in the README to fix this error:\n\thttps://github.com/golang/mock#reflect-vendoring-error.\n")
+			strings.Contains(sErr, "github.com/uberbrodt/mock/mockgen/model") {
+			fmt.Fprint(os.Stderr, "Please reference the steps in the README to fix this error:\n\thttps://github.com/uberbrodt/mock#reflect-vendoring-error.\n")
 			return nil, err
 		}
 		return nil, err
@@ -198,7 +198,7 @@ import (
 	"path"
 	"reflect"
 
-	"github.com/golang/mock/mockgen/model"
+	"github.com/uberbrodt/mock/mockgen/model"
 
 	pkg_ {{printf "%q" .ImportPath}}
 )

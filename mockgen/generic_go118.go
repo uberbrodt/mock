@@ -15,7 +15,7 @@ import (
 	"go/ast"
 	"strings"
 
-	"github.com/golang/mock/mockgen/model"
+	"github.com/uberbrodt/mock/mockgen/model"
 )
 
 func getTypeSpecTypeParams(ts *ast.TypeSpec) []*ast.Field {
